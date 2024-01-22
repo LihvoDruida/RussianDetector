@@ -1,8 +1,8 @@
 local addon = select(2, ...)
 local addonName, ns = ...;
 
-local settingsProvider = class("SettingsProvider");
-ns.SettingsProvider = settingsProvider
+local SettingsProvider = class("SettingsProvider");
+ns.SettingsProvider = SettingsProvider
 
 local defaultOptions = {
     -- Addons actual
@@ -11,7 +11,7 @@ local defaultOptions = {
     enableLeaveRaid = false,
 }
 
-function settingsProvider:Load()
+function SettingsProvider:Load()
     RussianDetector_Options = RussianDetector_Options or {}
 
     -- Assign default values for options not present in AddonUkrainizer_Options
@@ -22,7 +22,7 @@ function settingsProvider:Load()
     end
 end
 
-function settingsProvider:Build()
+function SettingsProvider:Build()
     local function addVerticalMargin(order)
         return {
             type = "description",
@@ -49,7 +49,6 @@ function settingsProvider:Build()
         end
     end
 
-    local releaseDate = tonumber(C_AddOns.GetAddOnMetadata(addonName, "X-ReleaseDate")) or 0
     local version = C_AddOns.GetAddOnMetadata(addonName, "Version")
     if string.match(version, "-[%w%d][%w%d][%w%d][%w%d][%w%d][%w%d][%w%d][%w%d]$") then
         version = "[alpha] " .. version
@@ -259,13 +258,13 @@ After pressing it, all your current settings will be lost, and the default value
     end
 end
 
-function settingsProvider:Reset()
+function SettingsProvider:Reset()
     RussianDetector_Options = self.GetDefaultOptions()
     ReloadUI()
 end
 
-function settingsProvider.GetDefaultOptions() return defaultOptions end
+function SettingsProvider.GetDefaultOptions() return defaultOptions end
 
-function settingsProvider.GetTranslatorsState()
+function SettingsProvider.GetTranslatorsState()
     return RussianDetector_Options.enableToxicityWarning, RussianDetector_Options.enableLeaveGroup
 end

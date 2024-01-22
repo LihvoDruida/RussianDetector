@@ -1,9 +1,10 @@
 local addonName, ns = ...
-local addon = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceEvent-3.0")
-_G.RaidAssistent = addon
+local addon = LibStub("AceAddon-3.0"):NewAddon(addonName, "AceEvent-3.0", "AceConsole-3.0", "AceTimer-3.0")
+local AceConfig = LibStub("AceConfig-3.0")
+local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 
 local checkMembers = ns.CheckGroupMembers:new()
-local settingsProvider = ns.SettingsProvider:new()
+local SettingsProvider = ns.SettingsProvider:new()
 local eventHandler = ns.EventHandler:new()
 
 local function LogMessage(message)
@@ -11,21 +12,20 @@ local function LogMessage(message)
 end
 
 local function createInterfaceOptions()
-  settingsProvider:Build()
+  SettingsProvider:Build()
 
-  local namespace = "RussianDetector"
-  LibStub("AceConfig-3.0"):RegisterOptionsTable(namespace, ns.Options)
-
-  local configDialogLib = LibStub("AceConfigDialog-3.0")
-  configDialogLib:AddToBlizOptions(namespace, "RussianDetector", nil, "General")
-  configDialogLib:AddToBlizOptions(namespace, "Причетні", "RussianDetector", "Contributors")
+  -- Register options table and slash command
+  local namespace = "Russian Detector"
+  AceConfig:RegisterOptionsTable(namespace, ns.Options)
+  AceConfigDialog:AddToBlizOptions(namespace, namespace)
+  addon:RegisterChatCommand("rusdetect", function() AceConfigDialog:Open(namespace) end)
 end
 
 local function OnPlayerLogin()
-  settingsProvider:Load()
+  SettingsProvider:Load()
   createInterfaceOptions()
 
-  local enableToxicityWarning, enableLeaveGroup, enableLeaveRaid = settingsProvider.GetTranslatorsState()
+  local enableToxicityWarning, enableLeaveGroup, enableLeaveRaid = SettingsProvider.GetTranslatorsState()
 
   local translators = {
     { enabled = enableToxicityWarning, func = SendToxicityWarning },
@@ -65,7 +65,7 @@ local function initializeAddon()
     text = "Ви впевнені, що хочете скинути всі налаштування до стандартних значень?",
     button1 = "Продовжити",
     button2 = "Скасувати",
-    OnAccept = function() settingsProvider:Reset() end,
+    OnAccept = function() SettingsProvider:Reset() end,
     OnShow = function() PlaySound(SOUNDKIT.RAID_WARNING) end,
     timeout = 0,
     whileDead = true,
