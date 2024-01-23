@@ -2,7 +2,7 @@
 ## Title:|cffff7d0a<Guardian>|r |cff69ccf0 Russian Alias Detector|r
 ## Title-ruRU:|cffff7d0a<Guardian>|r |cff69ccf0Слава Україні!|r
 ## Notes: Foster a harmonious gaming environment by avoiding interactions with Russian players!
-## Version: 2.0
+## Version: 2.1
 ## Author: melles1991
 ## DefaultState: Enabled
 ## IconTexture: Interface\AddOns\RussianDetector\assets\logo
